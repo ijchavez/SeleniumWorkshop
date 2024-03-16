@@ -1,11 +1,18 @@
 package TestNGFramework;
 
+import org.junit.Assert;
 import org.testng.annotations.Test;
-
 public class TestNGUsages {
-    @Test(description = "Test numero 1")
+    int i = 1;
+    @Test(description = "Test numero 1", invocationCount = 3, successPercentage = 60)
     public void testUno() {
-        System.out.println("TEST UNO");
+        boolean condition = true;
+        i++;
+        if (i % 2 != 0) {
+            condition = false;
+        }
+        Assert.assertTrue(condition);
+        System.out.println("Test finished OK");
     }
     @Test(description = "Test numero 2", dependsOnMethods = "testTres")
     public void testDos() {

@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
@@ -18,7 +20,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chromium.ChromiumDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
 
 public class Utilities {
 	public static void createDocxFile(WebDriver driver, String nombreArchivo, String rutaImagen) throws IOException, InvalidFormatException {
@@ -107,5 +112,19 @@ public class Utilities {
         	System.out.println(ex.toString());
         
         }
+	}
+	public static void devToolsCreateSession(WebDriver driver ) {
+		DevTools devTools = ((HasDevTools) driver).getDevTools();
+		devTools.createSession();
+
+	}
+	public static void setMobileMetrics(WebDriver driver, Object width, Object height) {
+		Map<String, Object> deviceMetrics = new HashMap<>();
+		deviceMetrics.put("width", width);
+		deviceMetrics.put("height", height);
+		deviceMetrics.put("mobile", true);
+		deviceMetrics.put("deviceScaleFactor", 50);
+
+		((ChromiumDriver) driver).executeCdpCommand("Emulation.setDeviceMetricsOverride", deviceMetrics);
 	}
 }

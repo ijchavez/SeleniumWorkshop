@@ -7,7 +7,9 @@ import org.testng.IReporter;
 import org.testng.ISuite;
 import org.testng.ISuiteResult;
 import org.testng.ITestContext;
+import org.testng.annotations.Listeners;
 import org.testng.xml.XmlSuite;
+
 
 public class CustomReporter implements IReporter{
     @Override
