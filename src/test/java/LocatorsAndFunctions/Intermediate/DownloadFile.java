@@ -1,4 +1,4 @@
-package LocatorsAndFunctions.Advance;
+package LocatorsAndFunctions.Intermediate;
 
 import java.io.IOException;
 
