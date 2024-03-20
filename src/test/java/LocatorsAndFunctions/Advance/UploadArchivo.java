@@ -31,7 +31,7 @@ public class UploadArchivo {
 	}
 	@Test
 	public void uploadTest() {
-		String fileName = "inicioSesionInvalido.xlsx";
+		String fileName = "data/inicioSesionInvalido.xlsx";
 		WebElement uploadInput = driver.findElement(By.id("fileInput"));
 		uploadInput.sendKeys("D:\\IdeaProjectsGlobal\\SeleniumJavaWorkshop\\src\\test\\resources\\" + fileName);
 

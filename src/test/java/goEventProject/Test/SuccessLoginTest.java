@@ -1,58 +1,70 @@
-package goEventProjectRaw.Test.Login;
+package goEventProject.Test;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import goEventProject.Base.BaseTest;
+import goEventProject.Utilities.Constants;
+
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
+public class SuccessLoginTest extends BaseTest {
 
-public class SuccessLoginTest {
-    WebDriver driver;
-    String url = "https://goevent-platform.vercel.app/";
     @Test
-    public void successfulUserLoginTest(){
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+    public void successfulUserLoginTest() {
+        landingPage = startTest();
 
-        driver.get(url);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        loginPage = landingPage.clickOnLoginBtn();
+        loginPage.setAddressOrUserInput(utilities.getPropertyByValue(prop,"testing_goevent_user"));
+        loginPage.clickOnContinueBtn(false);
 
-        WebElement loginBtn = driver.findElement(By.xpath("//a[@href='/sign-in']"));
-        loginBtn.click();
+        WebElement emailSetted = loginPage.getEmailSetted();
+        Assert.assertEquals(emailSetted.getText(),utilities.getPropertyByValue(prop,"testing_goevent_user"));
 
-        WebElement emailAddressOrUserInput = driver.findElement(By.id("identifier-field"));
-        emailAddressOrUserInput.sendKeys("testing.goevent@gmail.com");
+        loginPage.setPasswordInput(utilities.getPropertyByValue(prop,"testing_goevent_password"));
 
-        WebElement continueToPasswordBtn = driver.findElement(By.xpath("//button[@data-localization-key='formButtonPrimary']"));
-        continueToPasswordBtn.click();
+        mainPage = loginPage.clickOnContinueBtn(true);
 
-        WebElement emailSetted = driver.findElement(By.xpath("//p[@class='cl-identityPreviewText \uD83D\uDD12\uFE0F cl-internal-1ptfnbv']"));
-        Assert.assertEquals(emailSetted.getText(),"testing.goevent@gmail.com");
-
-
-        WebElement passwordInput = driver.findElement(By.id("password-field"));
-        passwordInput.sendKeys("y'Q98@0/1XuB");
-
-        WebElement continueToLoginBtn = driver.findElement(By.xpath("//button[@data-localization-key='formButtonPrimary']"));
-        continueToLoginBtn.click();
-
-        WebElement userAvatar = driver.findElement(By.xpath("//img[@title='Testing goEvent']"));
+        WebElement userAvatar = mainPage.getUserAvatar();
         Assert.assertTrue(userAvatar.isDisplayed());
 
-        WebElement homeLink = driver.findElement(By.linkText("Home"));
+        WebElement homeLink = mainPage.getHomeLink();
         Assert.assertEquals(homeLink.getText(), "Home");
 
-        WebElement createEventLink = driver.findElement(By.xpath("//a[@href='/events/create']"));
+        WebElement createEventLink = mainPage.getCreateEventLink();
         Assert.assertEquals(createEventLink.getText(), "Create Event");
 
-        WebElement myProfileLink = driver.findElement(By.xpath("//a[@href='/profile']"));
+        WebElement myProfileLink = mainPage.getMyProfileLink();
         Assert.assertEquals(myProfileLink.getText(), "My Profile");
 
-        driver.close();
     }
+    @Test
+    public void successfulUserOTPLoginTest() {
+        landingPage = startTest();
 
+        loginPage = landingPage.clickOnLoginBtn();
+        loginPage.setAddressOrUserInput(utilities.getPropertyByValue(prop,"testing_clerk_otp_user"));
+        loginPage.clickOnContinueBtn(false);
+
+        WebElement emailSetted = loginPage.getEmailSetted();
+        Assert.assertEquals(emailSetted.getText(), utilities.getPropertyByValue(prop,"testing_clerk_otp_user"));
+
+        loginPage.clickOnUseAnotherMethodLink();
+        loginPage.clickOnEmailCodeLink();
+
+        mainPage = loginPage.completeOTPCode(Constants.CLERK_TEST_OTP_CODE);
+
+        WebElement userAvatar = mainPage.getUserAvatar();
+        Assert.assertTrue(userAvatar.isDisplayed());
+
+        WebElement homeLink = mainPage.getHomeLink();
+        Assert.assertEquals(homeLink.getText(), "Home");
+
+        WebElement createEventLink = mainPage.getCreateEventLink();
+        Assert.assertEquals(createEventLink.getText(), "Create Event");
+
+        WebElement myProfileLink = mainPage.getMyProfileLink();
+        Assert.assertEquals(myProfileLink.getText(), "My Profile");
+
+    }
 }

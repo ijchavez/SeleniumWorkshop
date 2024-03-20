@@ -1,5 +1,6 @@
-package goEventProjectRaw.Test.Login;
+package goEventProject.Test;
 
+import goEventProject.Base.BaseTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,7 +14,7 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 import java.util.List;
 
-public class UnsuccessLoginTest {
+public class UnsuccessLoginTest extends BaseTest {
     WebDriver driver;
     String url = "https://goevent-platform.vercel.app/";
     @Test
@@ -81,5 +82,21 @@ public class UnsuccessLoginTest {
 
         driver.close();
 
+    }
+    @Test
+    public void bannedUserLoginTest() {
+        landingPage = startTest();
+
+        loginPage = landingPage.clickOnLoginBtn();
+        loginPage.setAddressOrUserInput("asd+clerk_test@asd.com");
+        loginPage.clickOnContinueBtn(false);
+
+        WebElement emailSetted = loginPage.getEmailSetted();
+        Assert.assertEquals(emailSetted.getText(),"asd+clerk_test@asd.com");
+
+        loginPage.setPasswordInput("SCiKt!HF2HBEmDW");
+
+        loginPage.clickOnContinueBtn(false);
+        Assert.assertEquals(loginPage.getBannedErrorMessage().getText(), "You are not authorized to perform this request", "Error message is not as expected");
     }
 }
